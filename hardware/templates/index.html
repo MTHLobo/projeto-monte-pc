@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-5 mb-5 bg-dark text-white rounded-3 shadow" style="background: linear-gradient(45deg, #212529 0%, #343a40 100%);">
+    <div class="container-fluid py-5 text-center">
+        <h1 class="display-4 fw-bold">Monte o PC dos seus Sonhos</h1>
+        <p class="fs-4">Peças de alta performance com verificação de compatibilidade em tempo real.</p>
+        <div class="mt-4">
+            <a href="/montagem/" class="btn btn-primary btn-lg px-5 fw-bold shadow">Ir para o Simulador</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    
+    <div class="d-flex align-items-center mb-4">
+        <div class="bg-primary p-2 rounded-3 me-3 text-white">⚙️</div>
+        <h2 class="fw-bold mb-0">Processadores</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for proc in processadores %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm hover-shadow">
+                <div class="card-body">
+                    <span class="badge bg-primary mb-2">CPU</span>
+                    <h5 class="card-title fw-bold">{{ proc.marca }} {{ proc.modelo }}</h5>
+                    <p class="text-muted small mb-3">Socket: <strong>{{ proc.socket }}</strong></p>
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <span class="h4 text-success fw-bold mb-0">R$ {{ proc.preco }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex align-items-center mb-4">
+        <div class="bg-success p-2 rounded-3 me-3 text-white">📟</div>
+        <h2 class="fw-bold mb-0">Placas-Mãe</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for placa in placas %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="badge bg-success mb-2">Motherboard</span>
+                    <h5 class="card-title fw-bold">{{ placa.marca }} {{ placa.modelo }}</h5>
+                    <p class="text-muted small mb-1">Socket: <strong>{{ placa.socket }}</strong></p>
+                    <p class="text-muted small mb-3">Memória: <strong>{{ placa.tipo_memoria }}</strong></p>
+                    <span class="h4 text-success fw-bold">R$ {{ placa.preco }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex align-items-center mb-4">
+        <div class="bg-warning p-2 rounded-3 me-3 text-dark">🧠</div>
+        <h2 class="fw-bold mb-0">Memórias RAM</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for ram in memorias %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="badge bg-warning text-dark mb-2">RAM</span>
+                    <h5 class="card-title fw-bold">{{ ram.marca }} {{ ram.modelo }}</h5>
+                    <p class="text-muted small mb-3">Tipo: <strong>{{ ram.tipo_memoria }}</strong></p>
+                    <span class="h4 text-success fw-bold">R$ {{ ram.preco }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<style>
+    .card { transition: transform 0.2s ease, shadow 0.2s ease; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important; }
+</style>
+{% endblock %}

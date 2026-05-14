@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Helvetica, Arial, sans-serif; color: #333; }
+        .header { text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .title { color: #007bff; font-size: 24px; }
+        .info { margin-top: 20px; }
+        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
+        th { background-color: #f8f9fa; text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
+        td { padding: 8px; border-bottom: 1px solid #eee; }
+        .total { margin-top: 30px; font-size: 20px; text-align: right; color: #28a745; }
+        .footer { margin-top: 50px; font-size: 10px; text-align: center; color: #777; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">Orçamento de Hardware</h1>
+        <p>Projeto Monte seu PC - Matheus Henrique</p>
+    </div>
+
+    <div class="info">
+        <p><strong>Configuração:</strong> {{ m.nome_build }}</p>
+        <p><strong>Data:</strong> {{ m.data_criacao|date:"d/m/Y" }}</p>
+        <p><strong>Cliente:</strong> {{ m.usuario.username }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Componente</th>
+                <th>Modelo Selecionado</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Placa-Mãe</td>
+                <td>{{ m.placa_mae.marca }} {{ m.placa_mae.modelo }}</td>
+                <td>R$ {{ m.placa_mae.preco }}</td>
+            </tr>
+            <tr>
+                <td>Processador</td>
+                <td>{{ m.processador.marca }} {{ m.processador.modelo }}</td>
+                <td>R$ {{ m.processador.preco }}</td>
+            </tr>
+            <tr>
+                <td>Memória RAM</td>
+                <td>{{ m.memoria_ram.marca }} {{ m.memoria_ram.modelo }}</td>
+                <td>R$ {{ m.memoria_ram.preco }}</td>
+            </tr>
+            {% if m.placa_de_video %}
+            <tr>
+                <td>Placa de Vídeo</td>
+                <td>{{ m.placa_de_video.marca }} {{ m.placa_de_video.modelo }}</td>
+                <td>R$ {{ m.placa_de_video.preco }}</td>
+            </tr>
+            {% endif %}
+            {% if m.fonte %}
+            <tr>
+                <td>Fonte</td>
+                <td>{{ m.fonte.marca }} {{ m.fonte.modelo }} ({{ m.fonte.potencia_w }}W)</td>
+                <td>R$ {{ m.fonte.preco }}</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <div class="total">
+        <strong>Valor Total do Orçamento: R$ {{ m.total_preco }}</strong>
+    </div>
+
+    <div class="footer">
+        Este documento é uma simulação gerada automaticamente pelo sistema Monte seu PC.
+    </div>
+</body>
+</html>

@@ -71,6 +71,46 @@
             </div>
         </div>
         {% endfor %}
+    </div> 
+
+    <div class="d-flex align-items-center mb-4 mt-5">
+        <div class="bg-danger p-2 rounded-3 me-3 text-white">🎮</div>
+        <h2 class="fw-bold mb-0">Placas de Vídeo</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for video in placas_video %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="badge bg-danger mb-2">GPU</span>
+                    <h5 class="card-title fw-bold">{{ video.marca }} {{ video.modelo }}</h5>
+                    <p class="text-muted small mb-1">Memória: <strong>{{ video.memoria_vram }}</strong></p>
+                    <p class="text-muted small mb-3">TDP: <strong>{{ video.tdp }}W</strong></p>
+                    <span class="h4 text-success fw-bold">R$ {{ video.preco }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="d-flex align-items-center mb-4 mt-5">
+        <div class="bg-secondary p-2 rounded-3 me-3 text-white">⚡</div>
+        <h2 class="fw-bold mb-0">Fontes de Alimentação</h2>
+    </div>
+    <div class="row g-4 mb-5">
+        {% for fonte in fontes %}
+        <div class="col-md-4 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <span class="badge bg-secondary mb-2">PSU</span>
+                    <h5 class="card-title fw-bold">{{ fonte.marca }} {{ fonte.modelo }}</h5>
+                    <p class="text-muted small mb-1">Potência: <strong>{{ fonte.potencia_w }}W</strong></p>
+                    <p class="text-muted small mb-3">Selo: <strong>{{ fonte.certificacao }}</strong></p>
+                    <span class="h4 text-success fw-bold">R$ {{ fonte.preco }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
 </div>

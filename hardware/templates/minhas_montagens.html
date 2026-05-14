@@ -1,65 +1,75 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold text-dark mb-0">💾 Minhas Montagens Salvas</h1>
-        <a href="/montagem/" class="btn btn-primary">Nova Montagem</a>
+        <h2 class="fw-bold">💾 Minhas Montagens Salvas</h2>
+        <a href="/montagem/" class="btn btn-primary fw-bold shadow-sm">Nova Montagem</a>
     </div>
 
     {% if erro_login %}
-        <div class="alert alert-warning shadow-sm border-start border-4 border-warning" role="alert">
-            <h4 class="alert-heading">⚠️ Acesso Restrito</h4>
-            <p>Você precisa estar logado para visualizar suas builds salvas.</p>
-            <hr>
-            <a href="/admin/" class="btn btn-outline-warning">Ir para Login</a>
-        </div>
-    
+    <div class="alert alert-warning text-center">
+        <h4>Você não está logado!</h4>
+        <p>Faça login no sistema para ver os seus computadores salvos.</p>
+    </div>
     {% else %}
+        
         {% if montagens %}
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                {% for montagem in montagens %}
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0 rounded-3 overflow-hidden">
-                        <div class="card-header bg-dark text-white py-3">
-                            <h5 class="card-title mb-0 d-flex align-items-center">
-                                <span class="me-2">🖥️</span> {{ montagem.nome_build }}
-                            </h5>
+        <div class="row g-4">
+            {% for m in montagens %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header bg-dark text-white d-flex align-items-center">
+                        <span class="fs-5 me-2">🖥️</span>
+                        <h5 class="mb-0 fw-bold">{{ m.nome_build }}</h5>
+                    </div>
+                    <div class="card-body bg-light">
+                        <p class="text-muted small mb-3">📅 Salvo em: {{ m.data_criacao|date:"d/m/Y - H:i" }}</p>
+                        
+                        <div class="mb-2">
+                            <span class="text-muted small d-block">PLACA-MÃE</span>
+                            <strong>{{ m.placa_mae.marca }} {{ m.placa_mae.modelo }}</strong>
                         </div>
-                        <div class="card-body bg-white">
-                            <p class="text-muted small mb-3 border-bottom pb-2">
-                                📅 Salvo em: {{ montagem.data_criacao|date:"d/m/Y - H:i" }}
-                            </p>
-                            
-                            <ul class="list-unstyled">
-                                <li class="mb-2">
-                                    <small class="text-uppercase text-muted fw-bold d-block" style="font-size: 0.7rem;">Placa-Mãe</small>
-                                    <span class="text-dark">{{ montagem.placa_mae.marca }} {{ montagem.placa_mae.modelo }}</span>
-                                </li>
-                                <li class="mb-2">
-                                    <small class="text-uppercase text-muted fw-bold d-block" style="font-size: 0.7rem;">Processador</small>
-                                    <span class="text-dark">{{ montagem.processador.marca }} {{ montagem.processador.modelo }}</span>
-                                </li>
-                                <li class="mb-0">
-                                    <small class="text-uppercase text-muted fw-bold d-block" style="font-size: 0.7rem;">Memória RAM</small>
-                                    <span class="text-dark">{{ montagem.memoria_ram.marca }} {{ montagem.memoria_ram.modelo }}</span>
-                                </li>
-                            </ul>
+                        <div class="mb-2">
+                            <span class="text-muted small d-block">PROCESSADOR</span>
+                            <strong>{{ m.processador.marca }} {{ m.processador.modelo }}</strong>
                         </div>
-                        <div class="card-footer bg-light border-0 py-3 text-center">
-                            <span class="badge bg-success rounded-pill px-3 py-2">Pronto para montar</span>
+                        <div class="mb-2">
+                            <span class="text-muted small d-block">MEMÓRIA RAM</span>
+                            <strong>{{ m.memoria_ram.marca }} {{ m.memoria_ram.modelo }}</strong>
                         </div>
+                        
+                        {% if m.placa_de_video %}
+                        <div class="mb-2">
+                            <span class="text-muted small d-block">PLACA DE VÍDEO</span>
+                            <strong>{{ m.placa_de_video.marca }} {{ m.placa_de_video.modelo }}</strong>
+                        </div>
+                        {% endif %}
+
+                        {% if m.fonte %}
+                        <div class="mb-2">
+                            <span class="text-muted small d-block">FONTE</span>
+                            <strong>{{ m.fonte.marca }} {{ m.fonte.modelo }} ({{ m.fonte.potencia_w }}W)</strong>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-footer bg-white border-0 text-center pb-3 d-flex justify-content-between">
+                        <button class="btn btn-success btn-sm fw-bold px-3">Pronto para montar</button>
+                        <a href="{% url 'deletar_montagem' m.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Tem certeza que deseja apagar a montagem {{ m.nome_build }}?');">
+                            🗑️ Apagar
+                        </a>
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
+        </div>
         {% else %}
-            <div class="text-center py-5 bg-white shadow-sm rounded-3 border">
-                <p class="display-1 text-muted opacity-25">📂</p>
-                <p class="lead text-muted">Você ainda não salvou nenhuma configuração de PC.</p>
-                <a href="/montagem/" class="btn btn-primary mt-3">Começar Minha Primeira Build</a>
-            </div>
+        <div class="text-center p-5 bg-light rounded-3 mt-4 text-muted">
+            <h3>Você ainda não tem PCs salvos.</h3>
+            <p>Vá para o simulador e crie a sua primeira máquina!</p>
+        </div>
         {% endif %}
+
     {% endif %}
 </div>
 {% endblock %}

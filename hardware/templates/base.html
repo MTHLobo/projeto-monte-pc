@@ -14,10 +14,30 @@
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">💻 Monte seu PC</a>
-            <div class="navbar-nav">
-                <a class="nav-link" href="/">Início</a>
-                <a class="nav-link" href="/montagem/">Simulador</a>
-                <a class="nav-link" href="/minhas-montagens/">Minhas Builds</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/montagem/">Simulador</a></li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link text-warning fw-bold" href="#">Olá, {{ user.username }}!</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/minhas-montagens/">Minhas Builds</a></li>
+                        <li class="nav-item">
+                            <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link text-danger text-decoration-none">Sair</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Entrar</a></li>
+                        <li class="nav-item"><a class="btn btn-primary btn-sm ms-2 mt-1" href="{% url 'cadastro' %}">Cadastrar</a></li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>
@@ -28,7 +48,7 @@
     </div>
 
     <footer class="text-center mt-5 py-3 text-muted">
-        <small>Projeto Monte seu PC - Matheus Henrique [cite: 6]</small>
+        <small>Projeto Monte seu PC - Matheus Henrique</small>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

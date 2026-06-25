@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <h2 class="fw-bold">Bem-vindo de volta!</h2>
+                        <p class="text-muted">Faça login para ver seus PCs salvos.</p>
+                    </div>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        
+                        <button type="submit" class="btn btn-success btn-lg w-100 fw-bold mt-3 shadow-sm">Entrar</button>
+                    </form>
+                    
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Ainda não tem conta? <a href="{% url 'cadastro' %}" class="text-decoration-none fw-bold">Criar Conta</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

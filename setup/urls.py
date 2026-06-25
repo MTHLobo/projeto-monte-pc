@@ -10,6 +10,10 @@ urlpatterns = [
     
     
     path('deletar/<int:id>/', views.deletar_montagem, name='deletar_montagem'),
-    
     path('gerar-pdf/<int:id>/', views.gerar_pdf_orcamento, name='gerar_pdf_orcamento'),
+    
+    
+    path('cadastro/', views.cadastro_usuario, name='cadastro'),
+    path('login/', views.login_usuario, name='login'),
+    path('logout/', views.logout_usuario, name='logout'),
 ]

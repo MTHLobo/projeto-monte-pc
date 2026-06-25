@@ -1,77 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
+    <title>Orçamento de PC - MontePC</title>
     <style>
-        body { font-family: Helvetica, Arial, sans-serif; color: #333; }
-        .header { text-align: center; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        .title { color: #007bff; font-size: 24px; }
-        .info { margin-top: 20px; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-        th { background-color: #f8f9fa; text-align: left; padding: 8px; border-bottom: 1px solid #ddd; }
-        td { padding: 8px; border-bottom: 1px solid #eee; }
-        .total { margin-top: 30px; font-size: 20px; text-align: right; color: #28a745; }
-        .footer { margin-top: 50px; font-size: 10px; text-align: center; color: #777; }
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 14px; color: #333; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        h1 { color: #004085; }
+        .info { font-size: 12px; color: #666; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; color: #333; font-weight: bold; }
+        .total-box { border: 2px solid #28a745; padding: 15px; text-align: right; background-color: #f8fff9; }
+        .total-preco { font-size: 24px; font-weight: bold; color: #28a745; }
+        .tdp-info { color: #dc3545; font-weight: bold; }
     </style>
 </head>
 <body>
+
     <div class="header">
-        <h1 class="title">Orçamento de Hardware</h1>
-        <p>Projeto Monte seu PC - Matheus Henrique</p>
+        <h1>🖥️ Orçamento de Computador - MontePC</h1>
+        <p>Sistema Inteligente de Automação e Verificação de Hardware</p>
     </div>
 
     <div class="info">
-        <p><strong>Configuração:</strong> {{ m.nome_build }}</p>
-        <p><strong>Data:</strong> {{ m.data_criacao|date:"d/m/Y" }}</p>
-        <p><strong>Cliente:</strong> {{ m.usuario.username }}</p>
+        <p><strong>Configuração focada em Alta Performance (DDR5 / AM5)</strong></p>
+        <p>Documento gerado automaticamente pelo simulador MontePC.</p>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th>Componente</th>
-                <th>Modelo Selecionado</th>
-                <th>Preço</th>
+                <th>Categoria</th>
+                <th>Componente Escolhido</th>
+                <th>Valor Estimado</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Placa-Mãe</td>
-                <td>{{ m.placa_mae.marca }} {{ m.placa_mae.modelo }}</td>
-                <td>R$ {{ m.placa_mae.preco }}</td>
-            </tr>
-            <tr>
-                <td>Processador</td>
-                <td>{{ m.processador.marca }} {{ m.processador.modelo }}</td>
-                <td>R$ {{ m.processador.preco }}</td>
-            </tr>
-            <tr>
-                <td>Memória RAM</td>
-                <td>{{ m.memoria_ram.marca }} {{ m.memoria_ram.modelo }}</td>
-                <td>R$ {{ m.memoria_ram.preco }}</td>
-            </tr>
-            {% if m.placa_de_video %}
-            <tr>
-                <td>Placa de Vídeo</td>
-                <td>{{ m.placa_de_video.marca }} {{ m.placa_de_video.modelo }}</td>
-                <td>R$ {{ m.placa_de_video.preco }}</td>
-            </tr>
-            {% endif %}
-            {% if m.fonte %}
-            <tr>
-                <td>Fonte</td>
-                <td>{{ m.fonte.marca }} {{ m.fonte.modelo }} ({{ m.fonte.potencia_w }}W)</td>
-                <td>R$ {{ m.fonte.preco }}</td>
-            </tr>
-            {% endif %}
+            <tr><td>Processador</td><td>{{ proc.marca }} {{ proc.modelo }}</td><td>R$ {{ proc.preco|floatformat:2 }}</td></tr>
+            <tr><td>Placa-Mãe</td><td>{{ placa.marca }} {{ placa.modelo }}</td><td>R$ {{ placa.preco|floatformat:2 }}</td></tr>
+            <tr><td>Memória RAM</td><td>{{ ram.marca }} {{ ram.modelo }}</td><td>R$ {{ ram.preco|floatformat:2 }}</td></tr>
+            
+            {% if video %}<tr><td>Placa de Vídeo</td><td>{{ video.marca }} {{ video.modelo }}</td><td>R$ {{ video.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if fonte %}<tr><td>Fonte</td><td>{{ fonte.marca }} {{ fonte.modelo }} ({{ fonte.potencia_w }}W)</td><td>R$ {{ fonte.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if ssd %}<tr><td>Armazenamento</td><td>{{ ssd.marca }} {{ ssd.modelo }}</td><td>R$ {{ ssd.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if cooler %}<tr><td>Refrigeração</td><td>{{ cooler.marca }} {{ cooler.modelo }}</td><td>R$ {{ cooler.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if gab %}<tr><td>Gabinete</td><td>{{ gab.marca }} {{ gab.modelo }}</td><td>R$ {{ gab.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if mouse %}<tr><td>Mouse</td><td>{{ mouse.marca }} {{ mouse.modelo }}</td><td>R$ {{ mouse.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if tec %}<tr><td>Teclado</td><td>{{ tec.marca }} {{ tec.modelo }}</td><td>R$ {{ tec.preco|floatformat:2 }}</td></tr>{% endif %}
+            {% if head %}<tr><td>Headset</td><td>{{ head.marca }} {{ head.modelo }}</td><td>R$ {{ head.preco|floatformat:2 }}</td></tr>{% endif %}
         </tbody>
     </table>
 
-    <div class="total">
-        <strong>Valor Total do Orçamento: R$ {{ m.total_preco }}</strong>
+    <div class="total-box">
+        <p>Consumo Estimado (TDP): <span class="tdp-info">{{ total_tdp }}W</span></p>
+        <p>Valor Total da Montagem: <br><span class="total-preco">R$ {{ total_preco|floatformat:2 }}</span></p>
     </div>
 
-    <div class="footer">
-        Este documento é uma simulação gerada automaticamente pelo sistema Monte seu PC.
-    </div>
 </body>
 </html>

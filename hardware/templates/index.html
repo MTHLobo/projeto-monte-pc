@@ -1,172 +1,64 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="row mb-4">
-        <div class="col-md-8">
-            <h2 class="fw-bold text-dark"><span class="text-primary">⚙️</span> Simulador de Montagem de Alta Performance</h2>
-            <p class="text-muted">Selecione componentes compatíveis (AM5 / DDR5) e monitore o consumo em tempo real.</p>
-        </div>
+<div class="p-5 mb-5 bg-dark text-white rounded-3 shadow" style="background: linear-gradient(45deg, #1a1d20 0%, #212529 100%);">
+    <div class="container-fluid py-4 text-center">
+        <h1 class="display-4 fw-bold mb-3">Monte o Setup Perfeito</h1>
+        <p class="fs-5 text-secondary mb-4">Escolha entre nossos kits otimizados ou use o simulador para criar uma máquina exclusiva com validação de compatibilidade em tempo real.</p>
+        <a href="/montagem/" class="btn btn-primary btn-lg px-5 py-3 fw-bold shadow-sm">
+            ⚙️ ABRIR SIMULADOR DE MONTAGEM
+        </a>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="d-flex align-items-center mb-4 border-bottom pb-2">
+        <h2 class="fw-bold mb-0 text-dark"><span class="text-success">📦</span> Kits Pré-Montados Recomendados</h2>
     </div>
 
-    <form method="post" action="" id="simuladorForm">
-        {% csrf_token %}
-        <div class="row">
-            
-            <div class="col-lg-8">
-                
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-dark text-white fw-bold">1. Arquitetura Base (Core)</div>
-                    <div class="card-body row">
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Processador (Socket AM5)</label>
-                            <select name="processador" class="form-select border-primary" required>
-                                <option value="">Selecione o processador...</option>
-                                {% for p in processadores %}
-                                <option value="{{ p.id }}" {% if proc_sel == p.id %}selected{% endif %}>
-                                    {{ p.marca }} {{ p.modelo }} | Socket: {{ p.socket }} | R$ {{ p.preco }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Placa-Mãe (DDR5)</label>
-                            <select name="placa" class="form-select border-primary" required>
-                                <option value="">Selecione a Placa-Mãe...</option>
-                                {% for pl in placas %}
-                                <option value="{{ pl.id }}" {% if placa_sel == pl.id %}selected{% endif %}>
-                                    {{ pl.marca }} {{ pl.modelo }} | {{ pl.tipo_memoria }} | Socket: {{ pl.socket }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
+    <div class="row g-4 mb-5">
+        {% for kit in kits %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm bg-white">
+                <div class="card-header bg-dark text-white border-0 py-3">
+                    <h5 class="card-title fw-bold mb-0">{{ kit.nome }}</h5>
                 </div>
-
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-success text-white fw-bold">2. Memória e Armazenamento</div>
-                    <div class="card-body row">
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Memória RAM (DDR5)</label>
-                            <select name="memoria" class="form-select border-success">
-                                {% for r in memorias %}
-                                <option value="{{ r.id }}" {% if ram_sel == r.id %}selected{% endif %}>
-                                    {{ r.modelo }} | {{ r.tipo_memoria }} | {{ r.frequencia_mhz }}MHz - R$ {{ r.preco }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">SSD NVMe (Armazenamento)</label>
-                            <select name="ssd" class="form-select border-success">
-                                {% for s in ssds %}
-                                <option value="{{ s.id }}" {% if ssd_sel == s.id %}selected{% endif %}>
-                                    {{ s.modelo }} | Cap: {{ s.capacidade }} - R$ {{ s.preco }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-warning fw-bold">3. Gráficos e Energia</div>
-                    <div class="card-body row">
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Placa de Vídeo (GPU)</label>
-                            <select name="placa_video" class="form-select border-warning">
-                                <option value="">Nenhuma (Vídeo Integrado)</option>
-                                {% for pv in placas_video %}
-                                <option value="{{ pv.id }}" {% if video_sel == pv.id %}selected{% endif %}>
-                                    {{ pv.modelo }} | VRAM: {{ pv.memoria_vram }} - R$ {{ pv.preco }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Fonte de Alimentação</label>
-                            <select name="fonte" class="form-select border-warning">
-                                {% for f in fontes %}
-                                <option value="{{ f.id }}" {% if fonte_sel == f.id %}selected{% endif %}>
-                                    {{ f.marca }} {{ f.modelo }} | {{ f.potencia_w }}W | {{ f.certificacao }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-header bg-info text-white fw-bold">4. Setup e Periféricos</div>
-                    <div class="card-body row">
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Gabinete</label>
-                            <select name="gabinete" class="form-select">
-                                {% for g in gabinetes %}<option value="{{ g.id }}" {% if gab_sel == g.id %}selected{% endif %}>{{ g.modelo }}</option>{% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="fw-bold small text-uppercase">Cooler</label>
-                            <select name="cooler" class="form-select">
-                                {% for c in coolers %}<option value="{{ c.id }}" {% if cooler_sel == c.id %}selected{% endif %}>{{ c.modelo }} | {{ c.tipo }}</option>{% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold small">Mouse</label>
-                            <select name="mouse" class="form-select">{% for m in mouses %}<option value="{{ m.id }}">{{ m.modelo }}</option>{% endfor %}</select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold small">Teclado</label>
-                            <select name="teclado" class="form-select">{% for t in teclados %}<option value="{{ t.id }}">{{ t.modelo }}</option>{% endfor %}</select>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <label class="fw-bold small">Headset</label>
-                            <select name="headset" class="form-select">{% for h in headsets %}<option value="{{ h.id }}">{{ h.modelo }}</option>{% endfor %}</select>
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-lg w-100 shadow fw-bold py-3">
-                    PROCESSAR ORÇAMENTO E COMPATIBILIDADE
-                </button>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="card shadow-lg border-0 p-4 sticky-top" style="top: 20px;">
-                    <h4 class="fw-bold text-center mb-4">Resumo da Build</h4>
+                <div class="card-body">
+                    <p class="card-text small text-muted mb-4">{{ kit.descricao }}</p>
                     
-                    {% if erro %}
-                        <div class="alert alert-danger shadow-sm border-0">{{ erro }}</div>
-                    {% elif mensagem_salvamento %}
-                        <div class="alert alert-success shadow-sm border-0">{{ mensagem_salvamento }}</div>
-                    {% endif %}
-
-                    <div class="p-3 bg-light rounded mb-3">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Consumo Estimado:</span>
-                            <span class="badge bg-danger">{{ total_tdp }}W</span>
-                        </div>
-                        <div class="d-flex justify-content-between fs-4 fw-bold">
-                            <span>Total:</span>
-                            <span class="text-success">R$ {{ total_preco|floatformat:2 }}</span>
-                        </div>
+                    <ul class="list-group list-group-flush small mb-3">
+                        <li class="list-group-item px-0 py-1 border-0"><strong>CPU:</strong> {{ kit.processador.marca }} {{ kit.processador.modelo }}</li>
+                        <li class="list-group-item px-0 py-1 border-0"><strong>Placa-Mãe:</strong> {{ kit.placa_mae.modelo }}</li>
+                        <li class="list-group-item px-0 py-1 border-0"><strong>GPU:</strong> {{ kit.placa_video.modelo|default:"Vídeo Integrado" }}</li>
+                        <li class="list-group-item px-0 py-1 border-0"><strong>RAM:</strong> {{ kit.memoria_ram.modelo }}</li>
+                        <li class="list-group-item px-0 py-1 border-0"><strong>SSD:</strong> {{ kit.ssd.modelo }}</li>
+                        <li class="list-group-item px-0 py-1 border-0"><strong>Fonte:</strong> {{ kit.fonte.modelo }} ({{ kit.fonte.potencia_w }}W)</li>
+                    </ul>
+                    
+                    <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center">
+                        <span class="text-muted small">Preço à vista:</span>
+                        <h4 class="text-success fw-bold mb-0">R$ {{ kit.preco_total|floatformat:2 }}</h4>
                     </div>
-
-                    {% if sucesso %}
-                        <hr>
-                        <h6 class="fw-bold mb-3">💾 Salvar esta Montagem:</h6>
-                        <input type="text" name="nome_build" class="form-control mb-2" placeholder="Nome do seu PC" required>
-                        <button type="submit" name="salvar_build" class="btn btn-success w-100 fw-bold">GUARDAR NO MEU PERFIL</button>
-                        
-                        <input type="hidden" name="placa" value="{{ placa_sel }}">
-                        <input type="hidden" name="processador" value="{{ proc_sel }}">
-                        <input type="hidden" name="memoria" value="{{ ram_sel }}">
-                        <input type="hidden" name="placa_video" value="{{ video_sel }}">
-                        <input type="hidden" name="fonte" value="{{ fonte_sel }}">
-                    {% endif %}
+                </div>
+                <div class="card-footer bg-transparent border-0 pb-4 pt-0 text-center">
+                    <a href="/montagem/" class="btn btn-outline-dark w-100 fw-bold">Personalizar no Simulador</a>
                 </div>
             </div>
         </div>
-    </form>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-secondary text-center p-5 shadow-sm border-0" role="alert">
+                <h4 class="fw-bold">Nenhum Kit Disponível</h4>
+                <p>Execute o comando <code>python manage.py gerar_kits</code> no terminal para popular esta vitrine automaticamente.</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 </div>
+
+<style>
+    .card { transition: transform 0.2s ease, box-shadow 0.2s ease; border-radius: 12px; overflow: hidden; }
+    .card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
+    .list-group-item { background-color: transparent; }
+</style>
 {% endblock %}

@@ -1,75 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold">💾 Minhas Montagens Salvas</h2>
-        <a href="/montagem/" class="btn btn-primary fw-bold shadow-sm">Nova Montagem</a>
-    </div>
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">💾 Minhas Builds Salvas</h2>
 
     {% if erro_login %}
-    <div class="alert alert-warning text-center">
-        <h4>Você não está logado!</h4>
-        <p>Faça login no sistema para ver os seus computadores salvos.</p>
-    </div>
+        <div class="alert alert-warning">Você precisa fazer login para ver suas montagens salvas.</div>
     {% else %}
-        
-        {% if montagens %}
-        <div class="row g-4">
+        <div class="row">
             {% for m in montagens %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 shadow-sm border-0">
-                    <div class="card-header bg-dark text-white d-flex align-items-center">
-                        <span class="fs-5 me-2">🖥️</span>
-                        <h5 class="mb-0 fw-bold">{{ m.nome_build }}</h5>
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold text-primary">{{ m.nome_build }}</h4>
+                        <p class="text-muted small">Salva em: {{ m.data_criacao|date:"d/m/Y H:i" }}</p>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li><strong>CPU:</strong> {{ m.processador.marca }} {{ m.processador.modelo }}</li>
+                            <li><strong>Placa-Mãe:</strong> {{ m.placa_mae.marca }} {{ m.placa_mae.modelo }}</li>
+                            <li><strong>RAM:</strong> {{ m.memoria_ram.modelo }}</li>
+                            {% if m.placa_de_video %}<li><strong>GPU:</strong> {{ m.placa_de_video.modelo }}</li>{% endif %}
+                        </ul>
                     </div>
-                    <div class="card-body bg-light">
-                        <p class="text-muted small mb-3">📅 Salvo em: {{ m.data_criacao|date:"d/m/Y - H:i" }}</p>
-                        
-                        <div class="mb-2">
-                            <span class="text-muted small d-block">PLACA-MÃE</span>
-                            <strong>{{ m.placa_mae.marca }} {{ m.placa_mae.modelo }}</strong>
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <div class="d-flex justify-content-between gap-2">
+                            <a href="{% url 'gerar_pdf_orcamento' m.id %}" target="_blank" class="btn btn-outline-danger w-50 fw-bold">
+                                📄 Gerar PDF
+                            </a>
+                            <a href="{% url 'deletar_montagem' m.id %}" class="btn btn-outline-secondary w-50" onclick="return confirm('Tem certeza que deseja excluir?');">
+                                🗑️ Excluir
+                            </a>
                         </div>
-                        <div class="mb-2">
-                            <span class="text-muted small d-block">PROCESSADOR</span>
-                            <strong>{{ m.processador.marca }} {{ m.processador.modelo }}</strong>
-                        </div>
-                        <div class="mb-2">
-                            <span class="text-muted small d-block">MEMÓRIA RAM</span>
-                            <strong>{{ m.memoria_ram.marca }} {{ m.memoria_ram.modelo }}</strong>
-                        </div>
-                        
-                        {% if m.placa_de_video %}
-                        <div class="mb-2">
-                            <span class="text-muted small d-block">PLACA DE VÍDEO</span>
-                            <strong>{{ m.placa_de_video.marca }} {{ m.placa_de_video.modelo }}</strong>
-                        </div>
-                        {% endif %}
-
-                        {% if m.fonte %}
-                        <div class="mb-2">
-                            <span class="text-muted small d-block">FONTE</span>
-                            <strong>{{ m.fonte.marca }} {{ m.fonte.modelo }} ({{ m.fonte.potencia_w }}W)</strong>
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="card-footer bg-white border-0 text-center pb-3 d-flex justify-content-between">
-                        <button class="btn btn-success btn-sm fw-bold px-3">Pronto para montar</button>
-                        <a href="{% url 'deletar_montagem' m.id %}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Tem certeza que deseja apagar a montagem {{ m.nome_build }}?');">
-                            🗑️ Apagar
-                        </a>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12 text-center py-5">
+                <h5 class="text-muted">Você ainda não tem nenhuma configuração salva.</h5>
+                <a href="/montagem/" class="btn btn-primary mt-3">Ir para o Simulador</a>
+            </div>
             {% endfor %}
         </div>
-        {% else %}
-        <div class="text-center p-5 bg-light rounded-3 mt-4 text-muted">
-            <h3>Você ainda não tem PCs salvos.</h3>
-            <p>Vá para o simulador e crie a sua primeira máquina!</p>
-        </div>
-        {% endif %}
-
     {% endif %}
 </div>
 {% endblock %}

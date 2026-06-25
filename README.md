@@ -20,6 +20,3 @@ Projeto desenvolvido como parte do curso de Engenharia da Computação do Instit
 ## 👨‍💻 Desenvolvedor
 * **Matheus Lobo** ```
 
-### 3. Salvar e enviar para o GitHub
-1. Salve o arquivo no VS Code apertando **`Ctrl + S`**.
-2. Agora sim, volte para aquele terminal onde você estava (com o `venv` ativo) e rode os comandos exatamente nesta ordem:
